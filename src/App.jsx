@@ -72,6 +72,14 @@ function App() {
             recycle={false}
           />
         )}
+        <div aria-live="polite" className="sr-only">
+          {gameWon && (
+            <p>
+              Congratulations! You won! Press &quot;New Game&quot; to start
+              again.
+            </p>
+          )}
+        </div>
       </section>
     </div>
   );
