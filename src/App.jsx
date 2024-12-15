@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid';
 import './App.css';
 import { Dice } from './components/Dice';
 import { createRandomNumbers } from './lib';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Confetti from 'react-confetti';
 
 const generateAllNewDices = (amount) =>
@@ -14,10 +14,17 @@ const generateAllNewDices = (amount) =>
 
 function App() {
   const [diceValues, setDiceValues] = useState(() => generateAllNewDices(10));
+  const buttonRef = useRef(null);
 
   const gameWon = diceValues.every(
     (dice) => dice.isHeld && dice.value === diceValues[0].value,
   );
+
+  useEffect(() => {
+    if (gameWon) {
+      buttonRef.current.focus();
+    }
+  }, [gameWon]);
 
   const holdDie = (id) => {
     setDiceValues((diceValues) =>
@@ -60,8 +67,10 @@ function App() {
           ))}
         </div>
         <button
+          type="button"
+          ref={buttonRef}
           className="py-2 px-4 bg-blue-600 rounded-md text-white text-xl w-full max-w-40 mx-auto cursor-pointer"
-          onMouseDown={() => (gameWon ? resetGame() : rollDice())}
+          onClick={() => (gameWon ? resetGame() : rollDice())}
         >
           {gameWon ? 'Play again' : 'Roll'}
         </button>
